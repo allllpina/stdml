@@ -1,0 +1,39 @@
+name: ML Workspace CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'ml_workspace/**'
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'ml_workspace/**'
+
+jobs:
+  test-ml:
+    name: Check ML Environment
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ml_workspace
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          python-version: "3.12" 
+          environment-file: environment.yml
+          activate-environment: ml-env
+          auto-activate-base: false
+
+      - name: Run ML Linters
+        shell: bash -el {0}
+        run: |
+          # Base ML code linting
+          pip install ruff
+          ruff check .
