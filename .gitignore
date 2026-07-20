@@ -1,0 +1,54 @@
+# ==============================
+# 1. Python & FastAPI Backend
+# ==============================
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+.env
+.venv/
+env/
+venv/
+
+# ==============================
+# 2. ML & Data (DVC Territory)
+# ==============================
+# Всі сирі дані та моделі контролюються через DVC, а не Git
+/ml_workspace/data/
+/ml_workspace/models/*.pkl
+/ml_workspace/models/*.bin
+/ml_workspace/models/*.h5
+mlruns/
+*.parquet
+*.csv
+
+# Локальні конфіги DVC
+/.dvc/config.local
+/dvc.lock.local
+
+# ==============================
+# 3. Nix & Direnv (Local Dev)
+# ==============================
+.direnv/
+result
+result-*
+.envrc
+
+# ==============================
+# 4. Infrastructure & Secrets
+# ==============================
+# Ніколи не коміть локальні ключі, токени Vault чи kubeconfig
+secrets/
+*.pem
+*.key
+kubeconfig.yaml
+terraform.tfstate*
+
+# ==============================
+# 5. OS & IDE
+# ==============================
+.DS_Store
+.idea/
+.vscode/
+*.swp
