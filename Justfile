@@ -1,4 +1,9 @@
 set dotenv-load := true
+VAULT_TOKEN := env_var("VAULT_TOKEN")
+
+# ==========================================
+# CI and Code Quality checks
+# ==========================================
 
 # Sync dependencies throughout all workspaces
 sync:
@@ -20,3 +25,17 @@ test service:
 ci-check service:
     just lint {{service}}
     just typecheck {{service}}
+
+# ==========================================
+# Cluster administration k3d
+# ==========================================
+
+# Create local k3d cluster
+cluster-up:
+    @echo "Creating local k3d cluster..."
+    k3d cluster create mlops-cluster --port "8080:80@loadbalancer"
+    @echo "Cluster is ready! Kubeconfig updated automatically."
+
+# Stop and delete (system clean up)
+cluster-down:
+    k3d cluster delete mlops-cluster
