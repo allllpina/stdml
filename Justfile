@@ -39,3 +39,24 @@ cluster-up:
 # Stop and delete (system clean up)
 cluster-down:
     k3d cluster delete mlops-cluster
+
+# ==========================================
+# Infrastructure(Kubernetes / Helm)
+# ==========================================
+
+# Add Helm-repository HashiCorp (executes only once)
+helm-setup:
+    helm repo add hashicorp https://helm.releases.hashicorp.com
+    helm repo update
+
+# Rise vault in Dev-mode
+vault-up: helm-setup
+    helm upgrade --install vault hashicorp/vault \
+        --set "server.dev.enabled=true" \
+        --set "server.dev.devRootToken={{VAULT_TOKEN}}" \
+        --set "injector.enabled=false" \
+        --wait
+
+# Vault port forwarding to localhost
+vault-ui:
+    kubectl port-forward svc/vault 8200:8200
