@@ -14,13 +14,13 @@ jobs:
   test-api:
     name: Lint and Test API
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./services/api_gateway
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Install Just
+        uses: extractions/setup-just@v2
 
       - name: Install uv
         uses: astral-sh/setup-uv@v3
@@ -36,12 +36,16 @@ jobs:
       - name: Install dependencies
         run: uv sync --frozen
 
-      - name: Run Linters (Ruff)
-        run: uv run ruff check .
+      - name: Cache Mypy
+        uses: actions/cache@v4
+        with:
+          path: .mypy_cache
+          key: mypy-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            mypy-${{ runner.os }}-
 
-      - name: Run Type Checks (Mypy)
-        run: uv run mypy .
+      - name: Run CI Checks
+        run: just ci-check api_gateway
 
-      # Uncomment after addition of tests
-      # - name: Run Pytest
-      #   run: uv run pytest tests/
+      # - name: Run Tests
+      #   run: just test api_gateway
