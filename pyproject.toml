@@ -1,0 +1,49 @@
+[project]
+name = "stdml-workspace"
+version = "0.1.0"
+description = "Lazy-loaded ML microservices architecture on Kubernetes"
+requires-python = ">=3.12"
+
+
+dependencies = [] 
+
+[tool.uv.workspace]
+members = []
+
+[dependency-groups]
+dev = [
+    "ruff>=0.5.0",
+    "mypy>=1.10.0",
+    "pytest>=8.0.0",
+]
+
+# ==========================================
+# Tooling
+# ==========================================
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+# Які саме правила перевіряти
+select = [
+    "E",  # Standard style errors
+    "W",  # Warnings
+    "F",  # Logical errors
+    "I",  # Imports autosort
+    "B",  # Potential bugs
+    "UP", # Depricated syntax update
+]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
+warn_unused_configs = true
+warn_redundant_casts = true
