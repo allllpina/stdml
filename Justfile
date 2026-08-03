@@ -60,3 +60,9 @@ vault-up: helm-setup
 # Vault port forwarding to localhost
 vault-ui:
     kubectl port-forward svc/vault 8200:8200
+
+# ==========================================
+# API
+# ==========================================
+run-api:
+    uv run --package api uvicorn src.main:app --app-dir services/api --reload
