@@ -15,3 +15,10 @@ dependencies = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "httpx2>=2.9.1",
+    "pytest>=9.1.1",
+]
