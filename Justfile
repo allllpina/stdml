@@ -19,12 +19,15 @@ typecheck service:
 
 # Start tests
 test service:
-    uv run pytest services/{{service}}/tests
+    uv run --package {{service}} pytest services/{{service}}/tests
 
 # United command for CI, launches all checkups
 ci-check service:
     just lint {{service}}
     just typecheck {{service}}
+    just test {{service}}
+
+# 
 
 # ==========================================
 # Cluster administration k3d
