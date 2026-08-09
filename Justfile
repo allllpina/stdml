@@ -27,8 +27,6 @@ ci-check service:
     just typecheck {{service}}
     just test {{service}}
 
-# 
-
 # ==========================================
 # Cluster administration k3d
 # ==========================================
@@ -47,9 +45,10 @@ cluster-down:
 # Infrastructure(Kubernetes / Helm)
 # ==========================================
 
-# Add Helm-repository HashiCorp (executes only once)
+# Add Helm-repositories (executes only once)
 helm-setup:
     helm repo add hashicorp https://helm.releases.hashicorp.com
+    helm repo add bitnami https://charts.bitnami.com/bitnami
     helm repo update
 
 # Rise vault in Dev-mode
@@ -63,6 +62,23 @@ vault-up: helm-setup
 # Vault port forwarding to localhost
 vault-ui:
     kubectl port-forward svc/vault 8200:8200
+
+# Rise Redis in standalone mode (no auth for local dev)
+redis-up: helm-setup
+    helm upgrade --install redis bitnami/redis \
+        --set architecture=standalone \
+        --set auth.enabled=false \
+        --wait
+
+# Rise Kafka in KRaft mode (single broker, no auth, no persistence, pinned to a free chart version)
+# Rise Kafka using official Apache image (Bypassing Bitnami)
+kafka-up:
+    kubectl apply -f infra/k8s/kafka-dev.yaml
+    kubectl rollout status deployment/kafka --timeout=90s
+
+# Start all infrastructure
+infra-up: vault-up redis-up kafka-up
+    @echo "All infrastructure components (Vault, Redis, Kafka) are running!"
 
 # ==========================================
 # API
