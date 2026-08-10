@@ -1,5 +1,5 @@
 set dotenv-load := true
-VAULT_TOKEN := env_var("VAULT_TOKEN")
+VAULT_TOKEN := env_var_or_default("VAULT_TOKEN", "not_set")
 
 # ==========================================
 # CI and Code Quality checks
