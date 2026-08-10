@@ -1,5 +1,5 @@
 set dotenv-load := true
-VAULT_TOKEN := env_var("VAULT_TOKEN")
+VAULT_TOKEN := env_var_or_default("VAULT_TOKEN", "not_set")
 
 # ==========================================
 # CI and Code Quality checks
@@ -14,8 +14,8 @@ lint service:
     uv run ruff check services/{{service}}
 
 # Start Mypy for certain service
-typecheck service:
-    uv run mypy services/{{service}}
+typecheck package_name:
+    uv run --package {{package_name}} mypy services/{{package_name}}
 
 # Start tests
 test service:
