@@ -5,7 +5,9 @@ metadata:
 spec:
   ports:
   - port: 9092
-    name: plaintext
+    name: internal
+  - port: 9094
+    name: external
   selector:
     app: kafka
 ---
@@ -28,20 +30,24 @@ spec:
         image: apache/kafka:3.8.0
         ports:
         - containerPort: 9092
+        - containerPort: 9094
         env:
-        # Standard KRaft configuration for a single-node ephemeral cluster
         - name: KAFKA_NODE_ID
           value: "1"
         - name: KAFKA_PROCESS_ROLES
           value: "broker,controller"
+        # 1. Define three distinct listeners
         - name: KAFKA_LISTENERS
-          value: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093"
+          value: "INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:9094,CONTROLLER://0.0.0.0:9093"
+        # 2. Tell external clients to use localhost:9094, and internal pods to use kafka:9092
         - name: KAFKA_ADVERTISED_LISTENERS
-          value: "PLAINTEXT://kafka:9092"
+          value: "INTERNAL://kafka:9092,EXTERNAL://localhost:9094"
+        - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+          value: "CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+        - name: KAFKA_INTER_BROKER_LISTENER_NAME
+          value: "INTERNAL"
         - name: KAFKA_CONTROLLER_LISTENER_NAMES
           value: "CONTROLLER"
-        - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
-          value: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
         - name: KAFKA_CONTROLLER_QUORUM_VOTERS
           value: "1@localhost:9093"
         - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
