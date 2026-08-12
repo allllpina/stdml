@@ -43,7 +43,7 @@ class ModelService:
         Attempts to fetch the final prediction result from the cache.
         Returns a mock schema if the result is not yet available.
         """
-        result = await self._cache.get_prediction_result(respondent_id)
+        result = await self._cache.get_results(respondent_id)
 
         if result is not None:
             return PredictionResult(**result)

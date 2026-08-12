@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     version: str = "0.1.0"
 
     # Infrastructure (Default values for local dev)
-    kafka_bootstrap_servers: str = Field(default="localhost:9092")
+    kafka_bootstrap_servers: str = Field(default="localhost:9094")
     model_control_topic: str = Field(default="model_commands")
     prediction_topic: str = Field(default="predictions")
 

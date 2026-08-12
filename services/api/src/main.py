@@ -6,6 +6,7 @@ from src.communicators.kafka_communicator import KafkaCommunicator
 from src.communicators.mlflow_communicator import DagsHubCommunicator
 from src.communicators.redis_communicator import RedisCommunicator
 from src.core.config import settings
+from src.routers.model_router import router as model_router
 
 
 @asynccontextmanager
@@ -35,6 +36,7 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
+    app.include_router(router=model_router, prefix="/api/v1")
 
     @app.get("/health", tags=["System"])
     async def health_check() -> dict[str, str]:
