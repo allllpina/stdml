@@ -1,6 +1,7 @@
 import json
 
 from aiokafka import AIOKafkaProducer
+from src.schemas.events import ModelCommandEvent, PredictionRequestEvent
 
 from .base import BrokerCommunicator
 
@@ -40,10 +41,10 @@ class KafkaCommunicator(BrokerCommunicator):
 
     async def set_model(self, model_name: str) -> None:
         """Publishes a command to switch the active model."""
-        payload = {"action": "set_model", "model_name": model_name}
-        await self._producer.send_and_wait(self._commands_topic, payload)
+        event = ModelCommandEvent(action="set_model", model_name=model_name)
+        await self._producer.send_and_wait(self._commands_topic, event.model_dump())
 
     async def request_prediction(self, respondent_id: int) -> None:
         """Publishes a request to perform inference on a respondent."""
-        payload = {"respondent_id": respondent_id}
-        await self._producer.send_and_wait(self._prediction_topic, payload)
+        event = PredictionRequestEvent(respondent_id=respondent_id)
+        await self._producer.send_and_wait(self._prediction_topic, event.model_dump())
