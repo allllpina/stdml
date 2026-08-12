@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     vault_addr: str = Field(default="http://localhost:8200")
     vault_token: str | None = Field(default=None)
 
+    tracking_uri: str = Field(default="https://dagshub.com/fake-user/fake-repo.mlflow")
+
     # Settings can be read from .env
     model_config = SettingsConfigDict(
         env_file=".env",
