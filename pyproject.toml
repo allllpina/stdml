@@ -40,6 +40,10 @@ select = [
 ]
 ignore = []
 
+[tool.ruff.lint.flake8-bugbear]
+# Allow FastAPI dependencies in default arguments
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query", "fastapi.Path", "fastapi.Body"]
+
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"

@@ -76,3 +76,10 @@ class ModelTestResultResponse(BaseModel):
     error_margin: float | None = Field(
         default=None, description="Difference between actual and predicted"
     )
+
+
+class PredictionResult(BaseModel):
+    respondent_id: int
+    status: str
+    prediction: float | None = None
+    confidence: float = 0.0
