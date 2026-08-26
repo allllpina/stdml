@@ -59,9 +59,13 @@ vault-up: helm-setup
         --set "injector.enabled=false" \
         --wait
 
+vault-seed:
+    @echo "Starting secrret initialization script..."
+    VAULT_TOKEN={{VAULT_TOKEN}} bash scripts/vault_init.sh
+
 # Vault port forwarding to localhost
 vault-ui:
-    kubectl port-forward svc/vault 8200:8200
+    kubectl port-forward svc/vault 8200:8200 &
 
 # Rise Redis in standalone mode (no auth for local dev)
 redis-up: helm-setup
