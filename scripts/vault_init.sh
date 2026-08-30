@@ -25,16 +25,16 @@ while IFS='=' read -r key value; do
     # Skip comments and empty lines
     [[ -z "$key" || "$key" == \#* ]] && continue
     value=$(echo "$value" | tr -d '\r')
-    
+
     vault_args+=("$key=$value")
 done < "$ENV_FILE"
 
 if [ ${#vault_args[@]} -gt 0 ]; then
     echo "Writing ${#vault_args[@]} variables to: $VAULT_MOUNT/$SECRET_DOC"
-    
+
     kubectl exec "$VAULT_POD" -- env VAULT_TOKEN="$VAULT_TOKEN" \
         vault kv put "$VAULT_MOUNT/$SECRET_DOC" "${vault_args[@]}" > /dev/null
-        
+
     echo "--- Import has been completed successfully ---"
 else
     echo "Warning: No valid variables found in $ENV_FILE."

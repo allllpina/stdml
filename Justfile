@@ -59,6 +59,7 @@ vault-up: helm-setup
         --set "injector.enabled=false" \
         --wait
 
+# Seed vault with variables from .env
 vault-seed:
     @echo "Starting secrret initialization script..."
     VAULT_TOKEN={{VAULT_TOKEN}} bash scripts/vault_init.sh
@@ -87,5 +88,6 @@ infra-up: vault-up redis-up kafka-up
 # ==========================================
 # API
 # ==========================================
+# Run FastAPI service
 run-api:
     uv run --package api uvicorn src.main:app --app-dir services/api --reload
