@@ -1,76 +1,24 @@
 # STDML Workspace
 
-End-to-End MLOps Platform based on a microservices architecture. This monorepo contains the infrastructure configurations, API gateways, and machine learning workers.
+![Python](https://img.shields.io/badge/python-3.12.3-blue.svg)
+![Environment](https://img.shields.io/badge/environment-Nix%20%7C%20uv-success.svg)
+![License](https://shields.io/badge/license-Apache%202-blue)
 
-## Prerequisites
+An End-to-End MLOps Platform built on a robust microservices architecture. This monorepo provides a production-ready infrastructure for orchestrating API gateways, asynchronous machine learning workers, and local Kubernetes deployments.
 
-To develop and run this project locally, ensure you have the following tools installed:
-- **Nix** (with Flakes enabled) for declarative environment builds.
-- **Just** as a command runner (replaces Make).
-- **Docker** for running local containerized infrastructure.
-- **uv** for fast Python package and workspace management.
-- **k3d** and **Helm** (provided via Nix devShell or installed globally).
+Designed for scalability and seamless developer experience, the workspace centralizes configuration, dependency management, and strict code quality standards across all underlying services.
 
-## Project Setup
+## Core Architecture & Features
 
-The project uses `uv` workspaces to manage multiple Python microservices under a single global `uv.lock` file.
+* **Microservices Design:** Decoupled architecture utilizing FastAPI for the gateway and scalable, event-driven ML workers.
+* **Cloud-Native Infrastructure:** Fully reproducible local Kubernetes cluster provisioning via `k3d` and `Helm`.
+* **Centralized Secrets:** Dynamic configuration and secure credentials management powered by HashiCorp `Vault`.
+* **Deterministic Environments:** `Nix` Flakes combined with `uv` workspaces guarantee identical, blazing-fast package resolution across the monorepo.
+* **Developer Ergonomics:** Streamlined workflow automation using `Just` as a modern command runner.
+* **Strict Code Quality:** Mandatory type safety and linting enforced across all services via `Mypy` and `Ruff`.
 
-1. Clone the repository and navigate to the project root.
-2. Synchronize all workspace dependencies:
-   ```bash
-   just sync
-   ```
-## Infrastructure Management
-The local development environment runs on a k3d (Kubernetes) cluster with HashiCorp Vault for secrets management.
+## Documentation
 
-**Cluster Lifecycle:**
+Comprehensive documentation—including system prerequisites, local cluster setup, Vault initialization, and microservice development workflows—is maintained in the project Wiki.
 
-- Create and start the cluster:
-```bash
-just cluster-up
-```
-
-- Stop and destroy the cluster:
-```bash
-just cluster-down
-```
-
-**Vault Integration:**
-
-- Deploy Vault in dev-mode via Helm:
-```bash
-just vault-up
-```
-- Forward ports to access the Vault UI (http://localhost:8200):
-```bash
-just vault-ui
-```
-_(Note: The default development root token is set to `root`)._
-
-## Development Workflow
-We enforce strict linting and type-checking across all microservices using Ruff and Mypy.
-
-**Code Quality Commands:**
-
-Run checks for a specific microservice by passing its directory name as an argument. For example, to check the `api_gateway` service:
-
-- Run Ruff (Linter & Formatter):
-```bash
-just lint api_gateway
-```
-
-- Run Mypy (Type Checker):
-```bash
-just typecheck api_gateway
-```
-
-- Run full CI pipeline locally:
-```bash
-just ci-check api_gateway
-```
-
-**Managing Dependencies:**
-To add a new package to a specific microservice, use the `--package` flag:
-```bash
-uv add fastapi pydantic --package api_gateway
-```
+📚[Go to the STDML Workspace Wiki](https://github.com/allllpina/stdml/wiki)
