@@ -85,6 +85,16 @@ kafka-up:
 infra-up: vault-up redis-up kafka-up
     @echo "All infrastructure components (Vault, Redis, Kafka) are running!"
 
+# Ініціалізація Feast
+feast-apply:
+    @echo "Застосовуємо конфігурацію Feast..."
+    cd infra/feast && uvx --with "feast[redis]" feast apply
+
+# Переливання даних з Parquet у Redis
+feast-seed: feast-apply
+    @echo "Завантажуємо дані з Parquet у Redis..."
+    cd infra/feast && uvx --with "feast[redis]" feast materialize 2000-01-01T00:00:00 2030-01-01T00:00:00
+
 # ==========================================
 # API
 # ==========================================

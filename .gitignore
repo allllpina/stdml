@@ -52,3 +52,10 @@ terraform.tfstate*
 .idea/
 .vscode/
 *.swp
+
+# ==============================
+# 6. Feast
+# ==============================
+
+infra/feast/data/
+infra/feast/.feast/
