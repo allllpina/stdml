@@ -1,60 +1,0 @@
-
-
-m
-	survey_idCĞ£Ğ½Ñ–ĞºĞ°Ğ»ÑŒĞ½Ğ¸Ğ¹ ID Ñ€ĞµÑĞ¿Ğ¾Ğ½Ğ´ĞµĞ½Ñ‚Ğ° Ğ¾Ğ¿Ğ¸Ñ‚ÑƒĞ²Ğ°Ğ½Ğ½Ñ"	survey_idJstdml_features
-©™ÜÔÈ ÊæµÜÔ€Öı¥
-E
-%
-__dummy"
-__dummy_idJstdml_features
-©™ÜÔ ÎÍæµÜÔ à„¦1"$5026702f-2e18-4350-a592-4bd8a36045b8*·ÜÔ¸¡ÑÊ2º
-…
-respondent_featuresstdml_features	survey_id"
-Survey Year"
-	SalaryUSD"
-Country"
-PrimaryDatabase"
-YearsWithThisDatabase"
-OtherDatabases"
-EmploymentStatus"
-JobTitle"
-ManageStaff"
-YearsWithThisTypeOfJob"
-HowManyCompanies"
-OtherPeopleOnYourTeam"
-DatabaseServers"(
-$PopulationOfLargestCityWithin20Miles"
-EmploymentSector"
-CareerPlansThisYear"
-
-Gender2€†°–:Ã	TimestampZ0.../../ml_workspace/data/data_inf_clean.parquetŠ1feast.infra.offline_stores.file_source.FileSource¢.../../ml_workspace/data/data_inf_clean.parquet’µÜÔà™æ¢"µÜÔÀÑÀ¥@b
-	survey_id’latest0
-©™ÜÔ€†±æ·ÜÔˆäÀÊ
-€‡µÃ€±ï†0bÔ	TimestampZ0.../../ml_workspace/data/data_inf_clean.parquetŠ1feast.infra.offline_stores.file_source.FileSource¢.../../ml_workspace/data/data_inf_clean.parquetªstdml_features’©™ÜÔ¨òÚâ"©™ÜÔ°ˆ«æŠ0
-
-stdml_features
-©™ÜÔˆ—îâµÜÔàİù¢’“
-
-respondent_featuresstdml_features"feature_view*¦
-…
-respondent_featuresstdml_features	survey_id"
-Survey Year"
-	SalaryUSD"
-Country"
-PrimaryDatabase"
-YearsWithThisDatabase"
-OtherDatabases"
-EmploymentStatus"
-JobTitle"
-ManageStaff"
-YearsWithThisTypeOfJob"
-HowManyCompanies"
-OtherPeopleOnYourTeam"
-DatabaseServers"(
-$PopulationOfLargestCityWithin20Miles"
-EmploymentSector"
-CareerPlansThisYear"
-
-Gender2€†°–:Ã	TimestampZ0.../../ml_workspace/data/data_inf_clean.parquetŠ1feast.infra.offline_stores.file_source.FileSource¢.../../ml_workspace/data/data_inf_clean.parquet’©™ÜÔ¨òÚâ"©™ÜÔ°ˆ«æ@b
-	survey_id’latest
-©™ÜÔ€†±æ©™ÜÔ€†±æ2©™ÜÔˆåÈæB$69b3cb91-89ae-44ff-b267-8f18d5667778

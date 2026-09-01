@@ -57,5 +57,5 @@ terraform.tfstate*
 # 6. Feast
 # ==============================
 
-infra/feast/registry.db
+infra/feast/data/
 infra/feast/.feast/
