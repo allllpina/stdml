@@ -1,0 +1,8 @@
+project: stdml_features
+registry: data/registry.db
+provider: local
+offline_store:
+  type: file
+online_store:
+  type: redis
+  connection_string: "127.0.0.1:6379"
