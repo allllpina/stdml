@@ -2,6 +2,7 @@ import logging
 from typing import override
 
 from feast import FeatureStore
+
 from src.domain.entities import FeatureValue, RespondentFeatures
 from src.ports.feature_provider import FeatureProvider
 

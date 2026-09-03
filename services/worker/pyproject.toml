@@ -13,6 +13,7 @@ dependencies = [
     "pandas>=2.3.3",
     "pandas-stubs>=3.0.5.260730",
     "pydantic>=2.13.4",
+    "redis>=8.1.0",
 ]
 
 [tool.hatch.build.targets.wheel]

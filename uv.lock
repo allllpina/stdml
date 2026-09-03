@@ -3434,6 +3434,7 @@ dependencies = [
     { name = "pandas" },
     { name = "pandas-stubs" },
     { name = "pydantic" },
+    { name = "redis" },
 ]
 
 [package.dev-dependencies]
@@ -3448,6 +3449,7 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "pandas-stubs", specifier = ">=3.0.5.260730" },
     { name = "pydantic", specifier = ">=2.13.4" },
+    { name = "redis", specifier = ">=8.1.0" },
 ]
 
 [package.metadata.requires-dev]
