@@ -3,7 +3,7 @@ from typing import override
 
 import redis
 
-from src.domain.entities import PredictionResult
+from src.domain.entities import PredictionError, PredictionResult
 from src.ports.result_storage import ResultStorage
 
 logger = logging.getLogger(__name__)
@@ -16,7 +16,7 @@ class RedisResultStorage(ResultStorage):
         self._redis = redis.Redis.from_url(redis_url, decode_responses=True)
 
     @override
-    def save(self, result: PredictionResult) -> None:
+    def save(self, result: PredictionResult | PredictionError) -> None:
         key = f"result:{result.respondent_id}"
 
         payload = result.model_dump_json()

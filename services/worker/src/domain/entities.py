@@ -3,7 +3,6 @@ from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict, Field
 
-# Замість Any описуємо реальні типи, які можуть прийти з Feature Store
 FeatureValue = int | float | str | bool | None
 
 
@@ -51,3 +50,12 @@ class PredictionResult(BaseModel):
     respondent_id: int
     prediction: dict[str, FeatureValue]
     processed_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+
+
+class PredictionError(BaseModel):
+    """The error message, to be saved to the redis cache in case of problems"""
+
+    request_id: str
+    respondent_id: int
+    error_message: str
+    occured_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
