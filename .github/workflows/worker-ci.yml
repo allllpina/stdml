@@ -1,0 +1,54 @@
+name: Worker CI
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "services/worker/**"
+  push:
+    branches: ["main"]
+    paths:
+      - "services/worker/**"
+
+jobs:
+  test-worker:
+    name: Lint, Typecheck and Test Worker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Just
+        uses: extractions/setup-just@v2
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Cache Mypy
+        uses: actions/cache@v4
+        with:
+          path: .mypy_cache
+          key: mypy-worker-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            mypy-worker-${{ runner.os }}-
+
+      - name: Run Linter (Ruff)
+        run: just lint worker
+
+      - name: Run Typechecker (Mypy)
+        run: just typecheck worker
+
+      - name: Run Tests (Pytest)
+        run: just test worker
