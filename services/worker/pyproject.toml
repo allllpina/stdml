@@ -13,6 +13,7 @@ dependencies = [
     "pandas>=2.3.3",
     "pandas-stubs>=3.0.5.260730",
     "pydantic>=2.13.4",
+    "pydantic-settings>=2.14.2",
     "redis>=8.1.0",
 ]
 
@@ -23,6 +24,9 @@ packages = ["src"]
 dev = [
     "pytest>=9.1.1",
 ]
+
+[tool.mypy]
+disallow_subclassing_any = false
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
