@@ -1,11 +1,9 @@
-from typing import cast
-
-from src.communicators.base import (
+from communicators.base import (
     BrokerCommunicator,
     CacheCommunicator,
     MLFlowCommunicator,
 )
-from src.schemas.model_ops import PredictionResult
+from schemas.model_ops import PredictionResult
 
 
 class ModelService:
@@ -21,11 +19,11 @@ class ModelService:
 
     async def get_models(self) -> list[str]:
         """Fetches the list of available models from the MLflow registry."""
-        return cast(list[str], await self._mlflow.get_models())
+        return await self._mlflow.get_models()
 
     async def get_model(self) -> str | None:
         """Fetches the currently active model from the Redis cache."""
-        return cast(str | None, await self._cache.get_model())
+        return await self._cache.get_model()
 
     async def set_model(self, model_name: str) -> None:
         """
@@ -49,8 +47,5 @@ class ModelService:
             return PredictionResult(**result)
 
         return PredictionResult(
-            respondent_id=respondent_id,
-            status="processing_or_not_found",
-            prediction=None,
-            confidence=0.0
+            respondent_id=respondent_id, status="processing_or_not_found", prediction=None, confidence=0.0
         )

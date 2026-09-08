@@ -1,17 +1,14 @@
 import json
 
 from aiokafka import AIOKafkaProducer
-from src.schemas.events import ModelCommandEvent, PredictionRequestEvent
+from schemas.events import ModelCommandEvent, PredictionRequestEvent
 
 from .base import BrokerCommunicator
 
 
 class KafkaCommunicator(BrokerCommunicator):
     def __init__(
-        self,
-        bootstrap_servers: str,
-        commands_topic: str = "model_commands",
-        prediction_topic: str = "predictions"
+        self, bootstrap_servers: str, commands_topic: str = "model_commands", prediction_topic: str = "predictions"
     ):
         """
         Initializes the Kafka producer configuration.
@@ -21,8 +18,7 @@ class KafkaCommunicator(BrokerCommunicator):
         self._prediction_topic = prediction_topic
 
         self._producer = AIOKafkaProducer(
-            bootstrap_servers=bootstrap_servers,
-            value_serializer=lambda v: json.dumps(v).encode("utf-8")
+            bootstrap_servers=bootstrap_servers, value_serializer=lambda v: json.dumps(v).encode("utf-8")
         )
 
     async def start(self) -> None:

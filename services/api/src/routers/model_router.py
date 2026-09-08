@@ -1,6 +1,6 @@
+from dependencies import get_model_service
 from fastapi import APIRouter, Depends, status
-from src.dependencies import get_model_service
-from src.schemas.model_ops import (
+from schemas.model_ops import (
     CurrentModelResponse,
     GenericStatusResponse,
     ModelListResponse,
@@ -9,7 +9,7 @@ from src.schemas.model_ops import (
     PredictionResult,
     SetModelRequest,
 )
-from src.services.model_service import ModelService
+from services.model_service import ModelService
 
 router = APIRouter(prefix="/models", tags=["Models"])
 
