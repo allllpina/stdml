@@ -3,10 +3,11 @@ from collections.abc import AsyncGenerator
 
 import pytest
 import redis.asyncio as redis
-from src.communicators.redis_communicator import RedisCommunicator
+from communicators.redis_communicator import RedisCommunicator
 
 # Both local port-forwarding and GitHub Actions Service Containers will use this
 REDIS_TEST_URL = "redis://localhost:6379/0"
+
 
 @pytest.fixture
 async def real_redis_client() -> AsyncGenerator[redis.Redis, None]:

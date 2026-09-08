@@ -1,5 +1,5 @@
+from core.config import settings
 from fastapi.testclient import TestClient
-from src.core.config import settings
 
 
 def test_health_check_status_code(client: TestClient) -> None:
