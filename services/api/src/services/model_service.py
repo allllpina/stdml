@@ -3,7 +3,8 @@ from communicators.base import (
     CacheCommunicator,
     MLFlowCommunicator,
 )
-from schemas.model_ops import PredictionResult
+from fastapi import HTTPException
+from schemas.model_ops import PredictionError, PredictionResult
 
 
 class ModelService:
@@ -36,16 +37,23 @@ class ModelService:
         """Publishes an inference request to the message broker."""
         await self._broker.request_prediction(respondent_id)
 
-    async def get_result(self, respondent_id: int) -> PredictionResult:
+    async def get_result(self, respondent_id: int) -> PredictionResult | PredictionError:
         """
         Attempts to fetch the final prediction result from the cache.
-        Returns a mock schema if the result is not yet available.
+        Raises a 404 if the result is not yet available.
         """
         result = await self._cache.get_results(respondent_id)
 
-        if result is not None:
-            return PredictionResult(**result)
+        # 1. Результату ще немає (воркер працює або запиту не було)
+        if result is None:
+            # Замість фейкової моделі віддаємо чіткий HTTP статус клієнту
+            raise HTTPException(
+                status_code=404, detail=f"Result for respondent_id={respondent_id} is processing or not found."
+            )
 
-        return PredictionResult(
-            respondent_id=respondent_id, status="processing_or_not_found", prediction=None, confidence=0.0
-        )
+        # 2. Результат є, і це повідомлення про помилку з воркера
+        if "error_message" in result:
+            return PredictionError.model_validate(result)
+
+        # 3. Результат є, і це успішний прогноз
+        return PredictionResult.model_validate(result)

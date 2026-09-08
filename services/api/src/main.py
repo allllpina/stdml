@@ -12,7 +12,11 @@ from routers.model_router import router as model_router
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Manage the application lifecycle (Startup / Shutdown)."""
-    broker = KafkaCommunicator(bootstrap_servers=settings.kafka_bootstrap_servers)
+    broker = KafkaCommunicator(
+        bootstrap_servers=settings.kafka_bootstrap_servers,
+        commands_topic=settings.model_control_topic,
+        prediction_topic=settings.prediction_topic,
+    )
     cache = RedisCommunicator(redis_url=settings.redis_url)
     mlflow = DagsHubCommunicator(tracking_uri=settings.mlflow_tracking_uri)
 
