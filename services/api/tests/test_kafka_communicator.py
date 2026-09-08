@@ -5,7 +5,7 @@ from collections.abc import AsyncGenerator
 
 import pytest
 from aiokafka import AIOKafkaConsumer
-from src.communicators.kafka_communicator import KafkaCommunicator
+from communicators.kafka_communicator import KafkaCommunicator
 
 KAFKA_TEST_URL = "localhost:9094"
 
@@ -23,10 +23,7 @@ def prediction_topic() -> str:
 
 
 @pytest.fixture
-async def communicator(
-    commands_topic: str,
-    prediction_topic: str
-) -> AsyncGenerator[KafkaCommunicator, None]:
+async def communicator(commands_topic: str, prediction_topic: str) -> AsyncGenerator[KafkaCommunicator, None]:
     """Initializes the communicator with test-isolated topics."""
     comm = KafkaCommunicator(
         bootstrap_servers=KAFKA_TEST_URL,
@@ -38,10 +35,7 @@ async def communicator(
     await comm.close()
 
 
-async def test_set_model_publishes_message(
-    communicator: KafkaCommunicator,
-    commands_topic: str
-) -> None:
+async def test_set_model_publishes_message(communicator: KafkaCommunicator, commands_topic: str) -> None:
     consumer = AIOKafkaConsumer(
         commands_topic,
         bootstrap_servers=KAFKA_TEST_URL,
@@ -61,10 +55,7 @@ async def test_set_model_publishes_message(
         await consumer.stop()
 
 
-async def test_request_prediction_publishes_message(
-    communicator: KafkaCommunicator,
-    prediction_topic: str
-) -> None:
+async def test_request_prediction_publishes_message(communicator: KafkaCommunicator, prediction_topic: str) -> None:
     consumer = AIOKafkaConsumer(
         prediction_topic,
         bootstrap_servers=KAFKA_TEST_URL,

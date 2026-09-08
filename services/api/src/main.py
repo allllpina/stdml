@@ -1,18 +1,22 @@
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
+from communicators.kafka_communicator import KafkaCommunicator
+from communicators.mlflow_communicator import DagsHubCommunicator
+from communicators.redis_communicator import RedisCommunicator
+from core.config import settings
 from fastapi import FastAPI
-from src.communicators.kafka_communicator import KafkaCommunicator
-from src.communicators.mlflow_communicator import DagsHubCommunicator
-from src.communicators.redis_communicator import RedisCommunicator
-from src.core.config import settings
-from src.routers.model_router import router as model_router
+from routers.model_router import router as model_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Manage the application lifecycle (Startup / Shutdown)."""
-    broker = KafkaCommunicator(bootstrap_servers=settings.kafka_bootstrap_servers)
+    broker = KafkaCommunicator(
+        bootstrap_servers=settings.kafka_bootstrap_servers,
+        commands_topic=settings.model_control_topic,
+        prediction_topic=settings.prediction_topic,
+    )
     cache = RedisCommunicator(redis_url=settings.redis_url)
     mlflow = DagsHubCommunicator(tracking_uri=settings.mlflow_tracking_uri)
 
@@ -44,7 +48,7 @@ def create_app() -> FastAPI:
             "service": settings.project_name,
             "version": settings.version,
             "status": "ok",
-            "kafka_broker": settings.kafka_bootstrap_servers
+            "kafka_broker": settings.kafka_bootstrap_servers,
         }
 
     return app

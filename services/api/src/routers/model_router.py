@@ -1,15 +1,16 @@
+from dependencies import get_model_service
 from fastapi import APIRouter, Depends, status
-from src.dependencies import get_model_service
-from src.schemas.model_ops import (
+from schemas.model_ops import (
     CurrentModelResponse,
     GenericStatusResponse,
     ModelListResponse,
+    PredictionError,
     PredictionOrderRequest,
     PredictionOrderResponse,
     PredictionResult,
     SetModelRequest,
 )
-from src.services.model_service import ModelService
+from services.model_service import ModelService
 
 router = APIRouter(prefix="/models", tags=["Models"])
 
@@ -67,10 +68,10 @@ async def request_prediction(
     )
 
 
-@router.get("/predict/{respondent_id}", response_model=PredictionResult)
+@router.get("/predict/{respondent_id}", response_model=PredictionResult | PredictionError)
 async def get_prediction_result(
     respondent_id: int,
     service: ModelService = Depends(get_model_service),
-) -> PredictionResult:
+) -> PredictionResult | PredictionError:
     """Retrieves the prediction result from the cache."""
     return await service.get_result(respondent_id)

@@ -10,15 +10,13 @@ def main():
     feature_refs = [f"{feature_view.name}:{f.name}" for f in feature_view.features]
 
     test_survey_id = 1
-    print(
-        f"Запитуємо всі фічі ({len(feature_refs)} шт.) з Redis для survey_id = {test_survey_id}..."
-    )
+    print(f"Запитуємо всі фічі ({len(feature_refs)} шт.) з Redis для survey_id = {test_survey_id}...")
 
     feature_vector = store.get_online_features(
         features=feature_refs, entity_rows=[{"survey_id": test_survey_id}]
     ).to_dict()
 
-    print("\повний вектор фічей із Redis:")
+    print(r"\повний вектор фічей із Redis:")
     for key, values in feature_vector.items():
         print(f"  {key}: {values[0]}")
 
