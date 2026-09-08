@@ -9,7 +9,6 @@ FeatureValue = int | float | str | bool | None
 class InferenceCommand(BaseModel):
     """An inference execution command that comes from the message bus."""
 
-    request_id: str
     respondent_id: int
 
 
@@ -46,7 +45,6 @@ class RespondentFeatures(BaseModel):
 class PredictionResult(BaseModel):
     """The model's output, to be saved to the database or sent to the client."""
 
-    request_id: str
     respondent_id: int
     prediction: dict[str, FeatureValue]
     processed_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
@@ -55,7 +53,6 @@ class PredictionResult(BaseModel):
 class PredictionError(BaseModel):
     """The error message, to be saved to the redis cache in case of problems"""
 
-    request_id: str
     respondent_id: int
     error_message: str
     occured_at: datetime = Field(default_factory=lambda: datetime.now(UTC))

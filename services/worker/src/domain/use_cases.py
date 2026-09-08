@@ -28,7 +28,7 @@ class InferenceService:
         self._result_storage = result_storage
 
     def process(self, command: InferenceCommand) -> PredictionResult | PredictionError:
-        logger.info(f"Starting request processing {command.request_id} for respondent_id={command.respondent_id}")
+        logger.info(f"Starting request processing for respondent_id={command.respondent_id}")
 
         result: PredictionResult | PredictionError
 
@@ -39,17 +39,14 @@ class InferenceService:
 
             prediction_dict = self._model_provider.predict(features)
             result = PredictionResult(
-                request_id=command.request_id,
                 respondent_id=command.respondent_id,
                 prediction=prediction_dict,
             )
         except Exception as e:
-            result = PredictionError(
-                request_id=command.request_id, respondent_id=command.respondent_id, error_message=f"Error: {e}"
-            )
+            result = PredictionError(respondent_id=command.respondent_id, error_message=f"Error: {e}")
 
         self._result_storage.save(result)
-        logger.info(f"Request {command.request_id} has been processed and saved successfully.")
+        logger.info(f"Request for respondent {command.respondent_id} has been processed and saved successfully.")
 
         return result
 
