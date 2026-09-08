@@ -23,16 +23,19 @@ async def main() -> None:
     logger.info("Setting up outbound adapters...")
     feature_provider = FeastFeatureProvider(repo_path=settings.feast_repo_path)
 
+    result_storage = RedisResultStorage(redis_url=settings.redis_url)
+
     model_provider = MLflowModelProvider(tracking_uri=settings.mlflow_tracking_uri)
     # Pre-load the champion model before starting to consume messages
-    logger.info(f"Pre-loading initial champion model: '{settings.initial_model_name}'")
     try:
         model_provider.load_model(settings.initial_model_name)
+
+        from src.domain.entities import CurrentModelMessage
+
+        result_storage.save_current_model(CurrentModelMessage(current_model=settings.initial_model_name))
     except Exception as e:
         logger.error(f"Failed to load initial model: {e}")
         raise
-
-    result_storage = RedisResultStorage(redis_url=settings.redis_url)
 
     # --- 2. Domain Use Cases Initialization ---
     logger.info("Setting up domain use cases...")

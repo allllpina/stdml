@@ -22,9 +22,9 @@ class Settings(BaseSettings):
     redis_url: str = Field(default="redis://localhost:6379/0")
 
     # Kafka configuration
-    kafka_bootstrap_servers: str = Field(default="localhost:9092")
+    kafka_bootstrap_servers: str = Field(default="localhost:9094")
     kafka_inference_topic: str = Field(default="inference_commands")
-    kafka_control_topic: str = Field(default="model_control")
+    kafka_control_topic: str = Field(default="model_commands")
     kafka_group_id: str = Field(default="ml_worker_group")
 
     model_config = SettingsConfigDict(

@@ -59,3 +59,10 @@ class PredictionError(BaseModel):
     respondent_id: int
     error_message: str
     occured_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+
+
+class CurrentModelMessage(BaseModel):
+    """The message that will be written in redis cache when new model weights are loaded."""
+
+    current_model: str
+    occured_at: datetime = Field(default_factory=lambda: datetime.now(UTC))

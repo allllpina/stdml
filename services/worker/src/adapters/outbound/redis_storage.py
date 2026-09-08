@@ -3,7 +3,7 @@ from typing import override
 
 import redis
 
-from src.domain.entities import PredictionError, PredictionResult
+from src.domain.entities import CurrentModelMessage, PredictionError, PredictionResult
 from src.ports.result_storage import ResultStorage
 
 logger = logging.getLogger(__name__)
@@ -29,3 +29,15 @@ class RedisResultStorage(ResultStorage):
         except Exception as e:
             logger.error(f"Error saving the result in Redis for respondent_id={result.respondent_id}: {e}")
             raise RuntimeError("Failed to save the result to Redis") from e
+
+    @override
+    def save_current_model(self, message: CurrentModelMessage) -> None:
+        key = "current_model"
+        payload = message.current_model
+
+        try:
+            self._redis.set(key, payload)
+            logger.info(f"Current model state saved to Redis at '{key}'")
+        except Exception as e:
+            logger.error(f"Error saving current model state: {e}")
+            raise RuntimeError("Failed to save current model to Redis") from e

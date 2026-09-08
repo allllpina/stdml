@@ -1,6 +1,12 @@
 import logging
 
-from src.domain.entities import InferenceCommand, ModelSwapCommand, PredictionError, PredictionResult
+from src.domain.entities import (
+    CurrentModelMessage,
+    InferenceCommand,
+    ModelSwapCommand,
+    PredictionError,
+    PredictionResult,
+)
 from src.ports.feature_provider import FeatureProvider
 from src.ports.model_provider import ModelProvider
 from src.ports.result_storage import ResultStorage
@@ -53,6 +59,8 @@ class InferenceService:
 
         try:
             self._model_provider.load_model(command.model_name)
+            msg = CurrentModelMessage(current_model=command.model_name)
+            self._result_storage.save_current_model(msg)
+            logger.info(f"Model successfully swapped to '{command.model_name}' and state updated.")
         except Exception as e:
-            logger.info(f"Error {e} has occured during weights swapping.")
-        logger.info(f"Model successfully swapped to '{command.model_name}'")
+            logger.error(f"Error {e} has occurred during weights swapping.", exc_info=True)
