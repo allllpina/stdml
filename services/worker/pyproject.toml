@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "Main worker service for the MLOps platform"
 requires-python = ">=3.12"
 dependencies = [
+    "aiokafka>=0.14.0",
     "feast>=0.66.0",
     "mlflow>=3.15.1",
     "pandas>=2.3.3",
