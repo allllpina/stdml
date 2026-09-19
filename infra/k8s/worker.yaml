@@ -23,6 +23,7 @@ spec:
           export MLFLOW_TRACKING_PASSWORD="{{ .Data.data.MLFLOW_TRACKING_PASSWORD }}"
           export INITIAL_MODEL_NAME="{{ .Data.data.INITIAL_MODEL_NAME }}"
           export REDIS_URL="{{ .Data.data.REDIS_URL }}"
+          export FEAST_REDIS_CONN="{{ .Data.data.FEAST_REDIS_CONN }}"
           export KAFKA_BOOTSTRAP_SERVERS="{{ .Data.data.KAFKA_BOOTSTRAP_SERVERS }}"
           export PREDICTION_TOPIC="{{ .Data.data.PREDICTION_TOPIC }}"
           export MODEL_CONTROL_TOPIC="{{ .Data.data.MODEL_CONTROL_TOPIC }}"

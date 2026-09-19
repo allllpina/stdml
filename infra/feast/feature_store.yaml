@@ -5,5 +5,4 @@ offline_store:
   type: file
 online_store:
   type: redis
-  # connection_string: "127.0.0.1:6379"
-  connection_string: "redis-master:6379"
+  connection_string: ${FEAST_REDIS_CONN}
