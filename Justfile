@@ -96,11 +96,27 @@ feast-seed: feast-apply
     cd infra/feast && uvx --with "feast[redis]" feast materialize 2000-01-01T00:00:00 2030-01-01T00:00:00
 
 # ==========================================
+# Full cluster deployment
+# ==========================================
+# Load Docker images into k3d cluster registry
+load-images:
+    @echo "Завантажуємо дані з Parquet у Redis..."
+    k3d image import worker:latest api:latest -c mlops-cluster
+
+deploy: load-images
+    bash ./scripts/deploy_stack.sh
+
+
+# ==========================================
 # API
 # ==========================================
 # Run FastAPI service
 run-api:
     uv run --package api uvicorn main:app --app-dir services/api/src --reload
+
+# Forward API ports for local development (on demand)
+api-forward:
+    kubectl port-forward svc/api 8000:8000 &
 
 # ==========================================
 # WORKER
