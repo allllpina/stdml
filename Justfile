@@ -34,7 +34,7 @@ ci-check service:
 # Create local k3d cluster
 cluster-up:
     @echo "Creating local k3d cluster..."
-    k3d cluster create mlops-cluster --port "8080:80@loadbalancer"
+    k3d cluster create mlops-cluster -v /home/apna/Code/stdml/infra/feast:/home/apna/Code/stdml/infra/feast --port "8080:80@loadbalancer"
     @echo "Cluster is ready! Kubeconfig updated automatically."
 
 # Stop and delete (system clean up)
@@ -56,7 +56,7 @@ vault-up: helm-setup
     helm upgrade --install vault hashicorp/vault \
         --set "server.dev.enabled=true" \
         --set "server.dev.devRootToken={{VAULT_TOKEN}}" \
-        --set "injector.enabled=false" \
+        --set "injector.enabled=true" \
         --wait
 
 # Seed vault with variables from .env
@@ -96,8 +96,30 @@ feast-seed: feast-apply
     cd infra/feast && uvx --with "feast[redis]" feast materialize 2000-01-01T00:00:00 2030-01-01T00:00:00
 
 # ==========================================
+# Full cluster deployment
+# ==========================================
+# Load Docker images into k3d cluster registry
+load-images:
+    @echo "Завантажуємо дані з Parquet у Redis..."
+    k3d image import worker:latest api:latest -c mlops-cluster
+
+deploy: load-images
+    bash ./scripts/deploy_stack.sh
+
+
+# ==========================================
 # API
 # ==========================================
 # Run FastAPI service
 run-api:
-    uv run --package api uvicorn src.main:app --app-dir services/api --reload
+    uv run --package api uvicorn main:app --app-dir services/api/src --reload
+
+# Forward API ports for local development (on demand)
+api-forward:
+    kubectl port-forward svc/api 8000:8000 &
+
+# ==========================================
+# WORKER
+# ==========================================
+run-worker:
+    PYTHONPATH=services/worker uv run --package worker python -m src.main &

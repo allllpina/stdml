@@ -23,8 +23,8 @@ class Settings(BaseSettings):
 
     # Kafka configuration
     kafka_bootstrap_servers: str = Field(default="localhost:9094")
-    kafka_inference_topic: str = Field(default="inference_commands")
-    kafka_control_topic: str = Field(default="model_commands")
+    prediction_topic: str = Field(default="inference_commands")
+    model_control_topic: str = Field(default="model_commands")
     kafka_group_id: str = Field(default="ml_worker_group")
 
     model_config = SettingsConfigDict(

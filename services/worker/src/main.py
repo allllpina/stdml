@@ -49,8 +49,8 @@ async def main() -> None:
     logger.info("Setting up inbound adapters...")
     kafka_listener = KafkaInboundListener(
         bootstrap_servers=settings.kafka_bootstrap_servers,
-        inference_topic=settings.kafka_inference_topic,
-        control_topic=settings.kafka_control_topic,
+        inference_topic=settings.prediction_topic,
+        control_topic=settings.model_control_topic,
         group_id=settings.kafka_group_id,
         inference_service=inference_service,
     )

@@ -59,3 +59,5 @@ terraform.tfstate*
 
 infra/feast/data/
 infra/feast/.feast/
+
+notes

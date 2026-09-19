@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "mlops-app"
+        vault.hashicorp.com/agent-inject-secret-config: "secret/env"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{- with secret "secret/data/env" -}}
+          export FEAST_REPO_PATH="{{ .Data.data.FEAST_REPO_PATH }}"
+          export MLFLOW_TRACKING_URI="{{ .Data.data.MLFLOW_TRACKING_URI }}"
+          export MLFLOW_TRACKING_USERNAME="{{ .Data.data.MLFLOW_TRACKING_USERNAME }}"
+          export MLFLOW_TRACKING_PASSWORD="{{ .Data.data.MLFLOW_TRACKING_PASSWORD }}"
+          export INITIAL_MODEL_NAME="{{ .Data.data.INITIAL_MODEL_NAME }}"
+          export REDIS_URL="{{ .Data.data.REDIS_URL }}"
+          export FEAST_REDIS_CONN="{{ .Data.data.FEAST_REDIS_CONN }}"
+          export KAFKA_BOOTSTRAP_SERVERS="{{ .Data.data.KAFKA_BOOTSTRAP_SERVERS }}"
+          export PREDICTION_TOPIC="{{ .Data.data.PREDICTION_TOPIC }}"
+          export MODEL_CONTROL_TOPIC="{{ .Data.data.MODEL_CONTROL_TOPIC }}"
+          export KAFKA_GROUP_ID="{{ .Data.data.KAFKA_GROUP_ID }}"
+          {{- end -}}
+    spec:
+      serviceAccountName: mlops-sa
+      containers:
+        - name: worker
+          image: worker:latest
+          imagePullPolicy: Never
+          command: ["/bin/sh", "-c"]
+          args: [". /vault/secrets/config && exec python -m src.main"]
+          volumeMounts:
+            - name: feast-config-vol
+              mountPath: /app/infra/feast
+      volumes:
+        - name: feast-config-vol
+          hostPath:
+            path: /home/apna/Code/stdml/infra/feast
+            type: Directory
